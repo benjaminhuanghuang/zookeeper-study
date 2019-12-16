@@ -2,22 +2,27 @@ package ben.study.zookeeper;
 
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// A new test instance will be created once per test class.
+@TestInstance(Lifecycle.PER_CLASS)
 class TestZookeeper {
-    //    private String connectString = "ip:2181,ip:2181,ip:2181";
-    private String connectString = "server.1:2181";
+    private String connectString = "localhost:2181";
+    //    private String connectString = "localhost:2181,localhost:2182,localhost:2183";
     private int sessionTimeout = 2000;
     ZooKeeper zkClient;
 
-    @BeforeEach
-    public void initEach() throws IOException {
+    @BeforeAll
+    public void setup() throws IOException {
         zkClient = new ZooKeeper(connectString, sessionTimeout, new Watcher() {
             @Override
             public void process(WatchedEvent watchedEvent) {
